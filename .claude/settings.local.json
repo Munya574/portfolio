@@ -1,0 +1,36 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl -s \"https://www.lspace.asu.edu/programs\")",
+      "Bash(curl -s \"https://codepath.org/courses/cybersecurity\")",
+      "WebSearch",
+      "Bash(curl -s \"https://www.indeed.com/career-advice/job-search-academy\")",
+      "Bash(curl -s \"https://www.lspace.asu.edu/\")",
+      "WebFetch(domain:techwise.talentsprint.com)",
+      "WebFetch(domain:mentalhealthfirstaid.org)",
+      "WebFetch(domain:www.lspace.asu.edu)",
+      "WebFetch(domain:www.codepath.org)",
+      "WebFetch(domain:hackmd.io)",
+      "WebFetch(domain:career.berkeley.edu)",
+      "WebFetch(domain:google.talentsprint.com)",
+      "WebFetch(domain:www.indeed.com)",
+      "WebFetch(domain:bryceverberne.com)",
+      "WebFetch(domain:medium.com)",
+      "WebFetch(domain:namimidhudson.org)",
+      "WebFetch(domain:karan220595.medium.com)",
+      "WebFetch(domain:careers.washu.edu)",
+      "WebFetch(domain:www.nasa.gov)",
+      "WebFetch(domain:careerhub.ufl.edu)",
+      "WebFetch(domain:mhfainternational.org)",
+      "WebFetch(domain:markets.financialcontent.com)",
+      "Bash(magick --version)",
+      "Bash(convert --version)",
+      "Bash(ffmpeg -version)",
+      "Bash(python3 -c \"from PIL import Image; print\\('pillow ok'\\)\")",
+      "Bash(python -c \"from PIL import Image; print\\('pillow ok'\\)\")",
+      "Bash(python3 -c ':*)",
+      "Bash(python -c ':*)",
+      "Bash(pip install:*)"
+    ]
+  }
+}
