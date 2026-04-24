@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { Analytics } from "@vercel/analytics/react";
 import heroImg from "./assets/Profilephoto.jpg";
 import mcaImg from "./assets/mca.png";
 import npweeImg from "./assets/npwee.png";
@@ -445,6 +446,7 @@ export default function Portfolio() {
 
   return (
     <div style={{ background: C.bg, color: C.text, fontFamily: "system-ui,-apple-system,sans-serif", minHeight: "100vh" }}>
+      <Analytics />
 
       {/* MODAL */}
       {selectedItem && <Modal item={selectedItem} onClose={() => setSelectedItem(null)} />}
