@@ -19,12 +19,12 @@ const NAV = ["About", "Projects", "Certifications", "Skills", "Resume", "Contact
 
 const PROJECTS = [
   {
-    title: "Mementoria",
-    desc: "Full-stack memory-keeping, scrapbooking app built as Product Lead on a 4-person team. Shipped to production in 4 weeks with a PostgreSQL backend, REST API, and multi-user session support.",
-    details: "As Product Lead, I collaborated on Mementoria, a full-stack web-app where users preserve memories through written entries, photo uploads, and audio recordings. Built with React on the frontend and Node.js on the backend, with a PostgreSQL/Prisma data layer designed to support concurrent multi-user sessions. I designed the relational data model, built the REST API endpoints, and coordinated a 4-person team from architecture to production ship in 4 weeks.",
-    tech: ["React", "Node.js", "PostgreSQL", "Prisma", "Tailwind CSS"],
-    github: "https://github.com/Munya574/mementoria.git",
-    tag: "Web App", col: C.purple,
+    title: "Eye Disease Diagnostic System",
+    desc: "OphthoAI takes a patient's reported symptoms and returns a structured clinical diagnosis — ICD-10 code, CPT billing code, severity level, prescription recommendation, and an ML confidence score — stored in a SQLite audit log with every query timestamped.",
+    details: "OphthoAI accepts patient-reported symptoms and produces a full clinical output: matching ICD-10 code, CPT billing code, severity classification (Mild / Moderate / Severe / Critical), prescription recommendation, and an ML confidence score. The system runs in two modes — a Flask-served web UI with symptom autocomplete and color-coded severity badges, and a CLI batch mode that processes a symptoms.csv file for multiple patients at once. ICD-10 feature engineering converts the hierarchical ophthalmology code structure (H00–H59) into numerical ML features encoding anatomical category, subcategory, code specificity, and laterality. A RandomForest classifier trained on those structural features combined with symptom keyword vectors predicts both condition and severity. A Flask REST API exposes four endpoints for diagnosis, retrieval, and condition lookup, backed by a SQLite database with conditions, diagnoses, and audit_log tables — every query is traceable with a UTC timestamp.",
+    tech: ["Python", "Flask", "SQL", "scikit-learn"],
+    github: "https://github.com/Munya574/Eye-Disease-Diagnostics-System.git",
+    tag: "Healthcare AI", col: C.pink,
     images: []
   },
   {
@@ -46,21 +46,21 @@ const PROJECTS = [
     images: []
   },
   {
-    title: "Eye Disease Diagnostic System",
-    desc: "ML diagnostic system classifying ICD-10 ophthalmology codes across severity levels using Flask and scikit-learn, with a SQL backend built for audit-traceable clinical workflows.",
-    details: "Built an ML-powered diagnostic system that classifies ICD-10 ophthalmology codes (H00–H59) across severity levels using scikit-learn and Flask. One of the core challenges was bridging medical taxonomy and ML — I converted the structured ICD-10 code hierarchy into ML-ready features, allowing the model to reason across clinical categories. The SQL backend was designed for scalability and audit traceability, supporting reliable diagnostic query and retrieval workflows suited to a clinical setting.",
-    tech: ["Python", "Flask", "SQL", "scikit-learn"],
-    github: "https://github.com/Munya574/Final_project-Fall-2024-.git",
-    tag: "Healthcare AI", col: C.pink,
-    images: []
-  },
-  {
     title: "DEI in Tech Research",
     desc: "Faculty-supervised research examining diversity, equity, and inclusion trends in the technology sector, combining qualitative synthesis with quantitative data analysis.",
     details: "Faculty-supervised research at Grambling State University examining DEI trends across the technology industry. The work combines systematic literature review with quantitative analysis of workforce demographics, hiring pipelines, and retention rates at major tech firms. Findings were compiled into a formal research report documenting structural barriers and evidence-based interventions for improving DEI outcomes in STEM fields.",
     tech: ["Python", "Data Analysis", "Research Methods"],
     github: null,
     tag: "Research", col: C.purple,
+    images: []
+  },
+  {
+    title: "Mementoria",
+    desc: "Full-stack memory-keeping, scrapbooking app built as Product Lead on a 4-person team. Shipped to production in 4 weeks with a PostgreSQL backend, REST API, and multi-user session support.",
+    details: "As Product Lead, I collaborated on Mementoria, a full-stack web-app where users preserve memories through written entries, photo uploads, and audio recordings. Built with React on the frontend and Node.js on the backend, with a PostgreSQL/Prisma data layer designed to support concurrent multi-user sessions. I designed the relational data model, built the REST API endpoints, and coordinated a 4-person team from architecture to production ship in 4 weeks.",
+    tech: ["React", "Node.js", "PostgreSQL", "Prisma", "Tailwind CSS"],
+    github: "https://github.com/Munya574/mementoria.git",
+    tag: "Web App", col: C.purple,
     images: []
   }
 ];
@@ -91,6 +91,18 @@ const CERTIFICATIONS = [
     images: [npweeImg]
   },
   {
+    title: "TechWise Program",
+    issuer: "TalentSprint · Google · CMU School of Computer Science",
+    date: "2024",
+    desc: "Selected for TechWise, a competitive, fully Google-funded 18-month software engineering program with 150 seats per cohort, mentorship from Google engineers, and a certificate from CMU's School of Computer Science.",
+    details: "TechWise is a fully Google-funded software engineering program run by TalentSprint, designed to increase representation in the technology industry. Admission is competitive (150 seats per cohort). Over 18 months at 12–15 hours per week, the curriculum spans five areas: Computational Thinking, Data Structures and Algorithms, Web Development (JavaScript, REST APIs, Express.js, PostgreSQL, CI/CD), Generative AI, and Machine Learning. Mentorship is structured across three tiers: TalentSprint instructors for technical content, Google engineers for professional development, and Carnegie Mellon University's School of Computer Science faculty for masterclasses. Graduates receive a certificate of completion from CMU's School of Computer Science Executive and Professional Education program.",
+    tag: "Tech Accelerator",
+    col: C.cyan,
+    skills: ["Data Structures & Algorithms", "Web Development", "JavaScript", "REST APIs", "Generative AI", "Machine Learning", "CI/CD"],
+    credential: "#",
+    images: [techwiseImg]
+  },
+  {
     title: "Cybersecurity 101",
     issuer: "CodePath",
     date: "2024",
@@ -113,18 +125,6 @@ const CERTIFICATIONS = [
     skills: ["Resume Writing", "Interview Prep", "Salary Negotiation", "Job Search Strategy", "Offer Evaluation", "Career Management"],
     credential: "#",
     images: [indeedImg]
-  },
-  {
-    title: "TechWise Program",
-    issuer: "TalentSprint · Google · CMU School of Computer Science",
-    date: "2024",
-    desc: "Selected for TechWise, a competitive, fully Google-funded 18-month software engineering program with 150 seats per cohort, mentorship from Google engineers, and a certificate from CMU's School of Computer Science.",
-    details: "TechWise is a fully Google-funded software engineering program run by TalentSprint, designed to increase representation in the technology industry. Admission is competitive (150 seats per cohort). Over 18 months at 12–15 hours per week, the curriculum spans five areas: Computational Thinking, Data Structures and Algorithms, Web Development (JavaScript, REST APIs, Express.js, PostgreSQL, CI/CD), Generative AI, and Machine Learning. Mentorship is structured across three tiers: TalentSprint instructors for technical content, Google engineers for professional development, and Carnegie Mellon University's School of Computer Science faculty for masterclasses. Graduates receive a certificate of completion from CMU's School of Computer Science Executive and Professional Education program.",
-    tag: "Tech Accelerator",
-    col: C.cyan,
-    skills: ["Data Structures & Algorithms", "Web Development", "JavaScript", "REST APIs", "Generative AI", "Machine Learning", "CI/CD"],
-    credential: "#",
-    images: [techwiseImg]
   },
   {
     title: "Mental Health First Aid",
@@ -486,9 +486,11 @@ export default function Portfolio() {
                   Chilawo Nchimunya Munene
                 </span>
               </h1>
-              <p style={{ fontSize: 16, color: C.muted, maxWidth: 680, lineHeight: 1.75, marginBottom: 32 }}>
-                I am a Computer Science student at Grambling State University with a passion for AI, data analytics, and leveraging technology for social impact. My work spans machine learning research, web development projects, and data-driven insights. All of my work is centered around the goal of creating equitable tech solutions that make a difference. I am an international student from Zambia, and growing up in a developing country has deeply influenced my perspective on technology's potential to drive positive change. I am particularly interested in the intersection of AI and health equity, and I am eager to connect with others who share these passions.
-              </p>
+              <div style={{ fontSize: 16, color: C.muted, maxWidth: 680, lineHeight: 1.75, marginBottom: 32, display: "flex", flexDirection: "column", gap: 16 }}>
+                <p style={{ margin: 0 }}>Growing up in Zambia, I watched technology function as a privilege — present in the world, just not always in mine. That's the frame I bring to everything I build. I'm a Computer Science student at Grambling State University, and the question I keep coming back to is: what does it actually take to build systems that work for the people who need them most?</p>
+                <p style={{ margin: 0 }}>Most of my work lives at the intersection of AI and healthcare. I've built a clinical diagnostic system that maps patient symptoms to ICD-10 codes with auditable confidence scores, trained cancer detection models hitting 99% accuracy, and turned four years of nonprofit alumni data into dashboards that City Leadership restructured their program around. I'm drawn to high-stakes problems where the gap between what's technically possible and what's actually accessible is still wide.</p>
+                <p style={{ margin: 0 }}>I'm also a TechWise Fellow (Google + CMU), a NASA L'SPACE alumnus, and a Senior Resident Assistant with a Mental Health First Aid certification — which is a longer way of saying I don't think building good technology and showing up for people are separate things. Open to research collaborations, internships, and conversations at the intersection of AI, health equity, and impact.</p>
+              </div>
               <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
                 {["AI & Machine Learning", "Data Analytics", "Health Equity Tech", "Social Impact"].map(t => (
                   <span key={t} style={{ fontSize: 13, color: C.dim, border: `1px solid ${C.border}`, padding: "4px 13px", borderRadius: 20 }}>{t}</span>
