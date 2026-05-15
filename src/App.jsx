@@ -20,8 +20,8 @@ const NAV = ["About", "Projects", "Certifications", "Skills", "Resume", "Contact
 const PROJECTS = [
   {
     title: "Eye Disease Diagnostic System",
-    desc: "OphthoAI takes a patient's reported symptoms and returns a structured clinical diagnosis — ICD-10 code, CPT billing code, severity level, prescription recommendation, and an ML confidence score — stored in a SQLite audit log with every query timestamped.",
-    details: "OphthoAI accepts patient-reported symptoms and produces a full clinical output: matching ICD-10 code, CPT billing code, severity classification (Mild / Moderate / Severe / Critical), prescription recommendation, and an ML confidence score. The system runs in two modes — a Flask-served web UI with symptom autocomplete and color-coded severity badges, and a CLI batch mode that processes a symptoms.csv file for multiple patients at once. ICD-10 feature engineering converts the hierarchical ophthalmology code structure (H00–H59) into numerical ML features encoding anatomical category, subcategory, code specificity, and laterality. A RandomForest classifier trained on those structural features combined with symptom keyword vectors predicts both condition and severity. A Flask REST API exposes four endpoints for diagnosis, retrieval, and condition lookup, backed by a SQLite database with conditions, diagnoses, and audit_log tables — every query is traceable with a UTC timestamp.",
+    desc: "OphthoAI takes a patient's reported symptoms and returns a structured clinical diagnosis, ICD-10 code, CPT billing code, severity level, prescription recommendation, and an ML confidence score, stored in a SQLite audit log with every query timestamped.",
+    details: "OphthoAI accepts patient-reported symptoms and produces a full clinical output: matching ICD-10 code, CPT billing code, severity classification (Mild / Moderate / Severe / Critical), prescription recommendation, and an ML confidence score. The system runs in two modes — a Flask-served web UI with symptom autocomplete and color-coded severity badges, and a CLI batch mode that processes a symptoms.csv file for multiple patients at once. ICD-10 feature engineering converts the hierarchical ophthalmology code structure (H00–H59) into numerical ML features encoding anatomical category, subcategory, code specificity, and laterality. A RandomForest classifier trained on those structural features combined with symptom keyword vectors predicts both condition and severity. A Flask REST API exposes four endpoints for diagnosis, retrieval, and condition lookup, backed by a SQLite database with conditions, diagnoses, and audit_log tables, every query is traceable with a UTC timestamp.",
     tech: ["Python", "Flask", "SQL", "scikit-learn"],
     github: "https://github.com/Munya574/Eye-Disease-Diagnostics-System.git",
     tag: "Healthcare AI", col: C.pink,
@@ -619,9 +619,9 @@ export default function Portfolio() {
                 <h3 style={{ fontSize: 20, fontWeight: 800, marginBottom: 4 }}>Chilawo Nchimunya Munene</h3>
                 <p style={{ color: C.muted, fontSize: 14 }}>Computer Science · Grambling State University · GPA 3.9/4.0 · Dec 2027</p>
               </div>
-              <a href={resumePDF} download="ChilawoMunene-Resume.pdf" style={{ background: `linear-gradient(135deg,${C.purpleD},${C.cyanD})`, color: "#fff", padding: "10px 22px", borderRadius: 9, fontSize: 14, fontWeight: 700, textDecoration: "none" }}>
-                ↓ Download PDF
-              </a>
+              <button onClick={() => setShowResume(true)} style={{ background: `linear-gradient(135deg,${C.purpleD},${C.cyanD})`, color: "#fff", padding: "10px 22px", borderRadius: 9, fontSize: 14, fontWeight: 700, border: "none", cursor: "pointer" }}>
+                View Resume
+              </button>
             </div>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(200px,1fr))", gap: 28 }}>
               <div>
