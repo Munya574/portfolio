@@ -7,7 +7,8 @@ import codepathImg from "./assets/codepath.png";
 import indeedImg from "./assets/indeed.png";
 import mentalImg from "./assets/mental.png";
 import techwiseImg from "./assets/TechWise.png";
-import resumePDF from "./assets/ChilawoMunene-resume-DSR.pdf";
+import ai110Img from "./assets/AI110.png";
+import resumePDF from "./assets/ChilawoMunene-resume-.pdf";
 
 const C = {
   bg: "#08080e", surface: "#0f0f1c", card: "#14142a", border: "#1e1e3a",
@@ -34,6 +35,15 @@ const PROJECTS = [
     tech: ["Python", "PyTorch", "scikit-learn", "Pandas", "NumPy", "MLflow"],
     github: "https://github.com/Munya574/TechWise-Project-2.git",
     tag: "Machine Learning", col: C.cyan,
+    images: []
+  },
+  {
+    title: "Research Summarizer Agent",
+    desc: "Autonomous AI agent that polls a live job marketplace every 30 seconds, filters research-paper summarization tasks, and completes them end-to-end without human intervention — powered by Claude Sonnet with prompt caching.",
+    details: "Built an autonomous agent that continuously polls the Nightshift AGI marketplace, filters for research-paper summarization tasks, and completes them without human intervention. The agent integrates the Anthropic Claude API (claude-sonnet-4-6) with prompt caching to generate structured 6-section academic summaries covering problem, method, findings, limitations, and audience — reducing repeated token costs across the poll cycle. A web scraping pipeline built with requests and BeautifulSoup handles arXiv PDF-to-abstract URL normalization, graceful error handling, and content size limits to stay within Claude's context window. The REST API client manages the full job lifecycle: listing, acceptance with 409 race-condition handling, and proof submission via a session-authenticated requests.Session. A lightweight Flask health-check server runs on a daemon thread, enabling deployment on cloud platforms with liveness probes (Railway, Render, Fly.io). The agent loop uses resilient error isolation — per-job failures are caught and submitted as error proofs without crashing the main poll cycle.",
+    tech: ["Python", "Claude API", "Anthropic SDK", "Flask", "BeautifulSoup", "REST APIs"],
+    github: "https://github.com/Munya574/Research-summarizer-agent.git",
+    tag: "AI Agent", col: C.purple,
     images: []
   },
   {
@@ -101,6 +111,18 @@ const CERTIFICATIONS = [
     skills: ["Data Structures & Algorithms", "Web Development", "JavaScript", "REST APIs", "Generative AI", "Machine Learning", "CI/CD"],
     credential: "#",
     images: [techwiseImg]
+  },
+  {
+    title: "AI110: Foundations of AI Engineering",
+    issuer: "CodePath",
+    date: "2026",
+    desc: "10-week CodePath course in AI engineering — built AI-assisted applications while developing hands-on skills in Python, data structures, RAG, agentic workflows, and prompt engineering.",
+    details: "AI110 is CodePath's Foundations of AI Engineering course and the entry point to their Applied AI Engineering pathway. Over 10 weeks at 4–6 hours per week, the curriculum covers Python, data structures, algorithms, and object-oriented programming — with AI embedded directly into the coding process rather than treated as a separate topic. Core areas include ML literacy across supervised, unsupervised, and generative models; prompt engineering and critical evaluation of AI-generated code; Retrieval-Augmented Generation (RAG); agentic workflows; lightweight fine-tuning; and AI guardrails. Students use Git and GitHub throughout and build portfolio-ready applications including chatbots and summarization tools. Enrolled students receive complimentary access to Claude Code for the duration of the course.",
+    tag: "AI Engineering",
+    col: C.cyan,
+    skills: ["Python", "Data Structures & Algorithms", "Prompt Engineering", "RAG", "Agentic Workflows", "ML Literacy", "Git & GitHub", "Claude Code"],
+    credential: "#",
+    images: [ai110Img]
   },
   {
     title: "Cybersecurity 101",
