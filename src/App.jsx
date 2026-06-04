@@ -20,6 +20,24 @@ const NAV = ["About", "Projects", "Certifications", "Skills", "Resume", "Contact
 
 const PROJECTS = [
   {
+    title: "Research Summarizer Agent",
+    desc: "Autonomous AI agent that polls a live job marketplace every 30 seconds, filters research-paper summarization tasks, and completes them end-to-end without human intervention — powered by Claude Sonnet with prompt caching.",
+    details: "Built an autonomous agent that continuously polls the Nightshift AGI marketplace, filters for research-paper summarization tasks, and completes them without human intervention. The agent integrates the Anthropic Claude API (claude-sonnet-4-6) with prompt caching to generate structured 6-section academic summaries covering problem, method, findings, limitations, and audience, reducing repeated token costs across the poll cycle. A web scraping pipeline built with requests and BeautifulSoup handles arXiv PDF-to-abstract URL normalization, graceful error handling, and content size limits to stay within Claude's context window. The REST API client manages the full job lifecycle: listing, acceptance with 409 race-condition handling, and proof submission via a session-authenticated requests.Session. A lightweight Flask health-check server runs on a daemon thread, enabling deployment on cloud platforms with liveness probes (Railway, Render, Fly.io). The agent loop uses resilient error isolation, per-job failures are caught and submitted as error proofs without crashing the main poll cycle.",
+    tech: ["Python", "Claude API", "Anthropic SDK", "Flask", "BeautifulSoup", "REST APIs"],
+    github: "https://github.com/Munya574/Research-summarizer-agent.git",
+    tag: "AI Agent", col: C.purple,
+    images: []
+  },
+  {
+    title: "City Leadership (Choose901) Analytics",
+    desc: "Analyzed 4 years of alumni data (3,000+ records) for a Memphis nonprofit, surfaced 4 key student success drivers with 96% model accuracy. Dashboards adopted by City Leadership.",
+    details: "During my internship at the Edwards Research & Innovation Center (ERIC) at the University of Memphis, I applied ML classification models to 4 years of Choose901 alumni data to identify what drives student success. I engineered features, automated preprocessing pipelines in scikit-learn for reproducible training, and built interactive dashboards in Plotly and R to communicate findings. The model achieved 96% accuracy, and the results were adopted by City Leadership to restructure the program and improve data collection practices — real-world impact from a data project.",
+    tech: ["Python", "R", "Excel", "Pandas", "scikit-learn", "Plotly"],
+    github: null,
+    tag: "Data Analytics", col: C.pink,
+    images: []
+  },
+  {
     title: "Eye Disease Diagnostic System",
     desc: "OphthoAI takes a patient's reported symptoms and returns a structured clinical diagnosis, ICD-10 code, CPT billing code, severity level, prescription recommendation, and an ML confidence score, stored in a SQLite audit log with every query timestamped.",
     details: "OphthoAI accepts patient-reported symptoms and produces a full clinical output: matching ICD-10 code, CPT billing code, severity classification (Mild / Moderate / Severe / Critical), prescription recommendation, and an ML confidence score. The system runs in two modes — a Flask-served web UI with symptom autocomplete and color-coded severity badges, and a CLI batch mode that processes a symptoms.csv file for multiple patients at once. ICD-10 feature engineering converts the hierarchical ophthalmology code structure (H00–H59) into numerical ML features encoding anatomical category, subcategory, code specificity, and laterality. A RandomForest classifier trained on those structural features combined with symptom keyword vectors predicts both condition and severity. A Flask REST API exposes four endpoints for diagnosis, retrieval, and condition lookup, backed by a SQLite database with conditions, diagnoses, and audit_log tables, every query is traceable with a UTC timestamp.",
@@ -38,21 +56,12 @@ const PROJECTS = [
     images: []
   },
   {
-    title: "Research Summarizer Agent",
-    desc: "Autonomous AI agent that polls a live job marketplace every 30 seconds, filters research-paper summarization tasks, and completes them end-to-end without human intervention — powered by Claude Sonnet with prompt caching.",
-    details: "Built an autonomous agent that continuously polls the Nightshift AGI marketplace, filters for research-paper summarization tasks, and completes them without human intervention. The agent integrates the Anthropic Claude API (claude-sonnet-4-6) with prompt caching to generate structured 6-section academic summaries covering problem, method, findings, limitations, and audience — reducing repeated token costs across the poll cycle. A web scraping pipeline built with requests and BeautifulSoup handles arXiv PDF-to-abstract URL normalization, graceful error handling, and content size limits to stay within Claude's context window. The REST API client manages the full job lifecycle: listing, acceptance with 409 race-condition handling, and proof submission via a session-authenticated requests.Session. A lightweight Flask health-check server runs on a daemon thread, enabling deployment on cloud platforms with liveness probes (Railway, Render, Fly.io). The agent loop uses resilient error isolation — per-job failures are caught and submitted as error proofs without crashing the main poll cycle.",
-    tech: ["Python", "Claude API", "Anthropic SDK", "Flask", "BeautifulSoup", "REST APIs"],
-    github: "https://github.com/Munya574/Research-summarizer-agent.git",
-    tag: "AI Agent", col: C.purple,
-    images: []
-  },
-  {
-    title: "City Leadership (Choose901) Analytics",
-    desc: "Analyzed 4 years of alumni data (3,000+ records) for a Memphis nonprofit, surfaced 4 key student success drivers with 96% model accuracy. Dashboards adopted by City Leadership.",
-    details: "During my internship at the Edwards Research & Innovation Center (ERIC) at the University of Memphis, I applied ML classification models to 4 years of Choose901 alumni data to identify what drives student success. I engineered features, automated preprocessing pipelines in scikit-learn for reproducible training, and built interactive dashboards in Plotly and R to communicate findings. The model achieved 96% accuracy, and the results were adopted by City Leadership to restructure the program and improve data collection practices — real-world impact from a data project.",
-    tech: ["Python", "R", "Excel", "Pandas", "scikit-learn", "Plotly"],
-    github: null,
-    tag: "Data Analytics", col: C.pink,
+    title: "Mementoria",
+    desc: "Full-stack memory-keeping, scrapbooking app built as Product Lead on a 4-person team. Shipped to production in 4 weeks with a PostgreSQL backend, REST API, and multi-user session support.",
+    details: "As Product Lead, I collaborated on Mementoria, a full-stack web-app where users preserve memories through written entries, photo uploads, and audio recordings. Built with React on the frontend and Node.js on the backend, with a PostgreSQL/Prisma data layer designed to support concurrent multi-user sessions. I designed the relational data model, built the REST API endpoints, and coordinated a 4-person team from architecture to production ship in 4 weeks.",
+    tech: ["React", "Node.js", "PostgreSQL", "Prisma", "Tailwind CSS"],
+    github: "https://github.com/Munya574/mementoria.git",
+    tag: "Web App", col: C.purple,
     images: []
   },
   {
@@ -62,15 +71,6 @@ const PROJECTS = [
     tech: ["Python", "Data Analysis", "Research Methods"],
     github: null,
     tag: "Research", col: C.purple,
-    images: []
-  },
-  {
-    title: "Mementoria",
-    desc: "Full-stack memory-keeping, scrapbooking app built as Product Lead on a 4-person team. Shipped to production in 4 weeks with a PostgreSQL backend, REST API, and multi-user session support.",
-    details: "As Product Lead, I collaborated on Mementoria, a full-stack web-app where users preserve memories through written entries, photo uploads, and audio recordings. Built with React on the frontend and Node.js on the backend, with a PostgreSQL/Prisma data layer designed to support concurrent multi-user sessions. I designed the relational data model, built the REST API endpoints, and coordinated a 4-person team from architecture to production ship in 4 weeks.",
-    tech: ["React", "Node.js", "PostgreSQL", "Prisma", "Tailwind CSS"],
-    github: "https://github.com/Munya574/mementoria.git",
-    tag: "Web App", col: C.purple,
     images: []
   }
 ];
