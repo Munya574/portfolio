@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { Analytics } from "@vercel/analytics/react";
 import heroImg from "./assets/Profilephoto.jpg";
 import mcaImg from "./assets/mca.png";
@@ -7,25 +7,43 @@ import codepathImg from "./assets/codepath.png";
 import indeedImg from "./assets/indeed.png";
 import mentalImg from "./assets/mental.png";
 import techwiseImg from "./assets/TechWise.png";
-import ai110Img from "./assets/AI110.png";
-import resumePDF from "./assets/ChilawoMunene-resume-.pdf";
+import ai110Img from "./assets/codepathAI110-1.png";
+import ai201Img from "./assets/codepathAI201-1.png";
+import web101Img from "./assets/codepathWEB101-1.png";
+import resumePDF from "./assets/ChilawoMunene-resume-SW26.pdf";
 
-const C = {
-  bg: "#08080e", surface: "#0f0f1c", card: "#14142a", border: "#1e1e3a",
-  purple: "#a78bfa", purpleD: "#6d28d9", cyan: "#67e8f9", cyanD: "#0e7490",
-  pink: "#f9a8d4", pinkD: "#9d174d", text: "#e2e8f0", muted: "#94a3b8", dim: "#475569"
-};
+// Accent colors (warm editorial palette): clay, moss, ochre
+const C = { clay: "#b4532a", moss: "#2f6b57", ochre: "#9a6b12" };
 
-const NAV = ["About", "Projects", "Certifications", "Skills", "Resume", "Contact"];
+const NAV = ["About", "Work", "Product", "Experience", "Credentials", "Contact"];
 
 const PROJECTS = [
+  {
+    title: "Pona: Food-Sensitivity Checker",
+    desc: "Scan a barcode, photograph a label, or paste ingredients, and Pona flags anything on your profile without ever claiming \"safe.\" Built from a 20-person user study and measured at 94.5% allergen recall on 22,799 real allergen tags.",
+    details: "Pona (\"to heal\" in Zambian Tonga) checks whether a food contains something you react to, and it tells you what it couldn't check. I surveyed 20 people with allergies, celiac disease and intolerances: 11 had a checking method fail them, 8 cope by avoiding anything they're unsure about, and only 5 use an app at all. As a solo builder I handled research, design, backend, frontend, evaluation and deployment. Users check foods by barcode (Open Food Facts), label photo (multi-pass Tesseract OCR) or pasted text. A rule-based engine covering 13 conditions catches hidden ingredient names like semolina, sodium caseinate and ghee, and it avoids lookalikes such as cocoa butter and buckwheat. A printable chef card lets users show restaurant staff their triggers instead of explaining everything out loud. I measured a fine-tuned DistilBERT normalizer at F1 = 0.0 and replaced it with auditable rules, which reached 94.5% recall and removed about 2 GB of dependencies. When the data showed that 860 of 1,073 tree-nut flags were coconut, I reversed my FDA-based decision, and tree-nut precision rose from 58.6% to 85.6%. The guiding principle is to fail closed, never quietly: I fixed four bugs that reported food as fine when nothing had been checked, including an OCR pass that showed 93.7% confidence while dropping \"PEANUTS\" from a label. Each fix has a regression test, and there are 81 checks in total. Non-English labels reach only 27.3% recall, so I report that number separately instead of averaging it in.",
+    tech: ["Python", "FastAPI", "PostgreSQL", "Tesseract OCR", "React", "Tailwind CSS", "Docker"],
+    github: "https://github.com/Munya574/Pona",
+    live: "https://pona-t.vercel.app",
+    featured: true,
+    status: "In development",
+    tagline: "It never says “safe.” It tells you what it found, and what it couldn't check.",
+    stats: [
+      { value: "94.5%", label: "Allergen recall, English labels" },
+      { value: "22,799", label: "Human-tagged allergen tags evaluated" },
+      { value: "85.6%", label: "Tree-nut precision, up from 58.6% after a data-driven reversal" },
+      { value: "81", label: "Regression tests: fail closed, never quiet" }
+    ],
+    tag: "Health Tech", col: C.moss,
+    images: []
+  },
   {
     title: "Research Summarizer Agent",
     desc: "Autonomous AI agent that polls a live job marketplace every 30 seconds, filters research-paper summarization tasks, and completes them end-to-end without human intervention — powered by Claude Sonnet with prompt caching.",
     details: "Built an autonomous agent that continuously polls the Nightshift AGI marketplace, filters for research-paper summarization tasks, and completes them without human intervention. The agent integrates the Anthropic Claude API (claude-sonnet-4-6) with prompt caching to generate structured 6-section academic summaries covering problem, method, findings, limitations, and audience, reducing repeated token costs across the poll cycle. A web scraping pipeline built with requests and BeautifulSoup handles arXiv PDF-to-abstract URL normalization, graceful error handling, and content size limits to stay within Claude's context window. The REST API client manages the full job lifecycle: listing, acceptance with 409 race-condition handling, and proof submission via a session-authenticated requests.Session. A lightweight Flask health-check server runs on a daemon thread, enabling deployment on cloud platforms with liveness probes (Railway, Render, Fly.io). The agent loop uses resilient error isolation, per-job failures are caught and submitted as error proofs without crashing the main poll cycle.",
     tech: ["Python", "Claude API", "Anthropic SDK", "Flask", "BeautifulSoup", "REST APIs"],
     github: "https://github.com/Munya574/Research-summarizer-agent.git",
-    tag: "AI Agent", col: C.purple,
+    tag: "AI Agent", col: C.clay,
     images: []
   },
   {
@@ -34,7 +52,7 @@ const PROJECTS = [
     details: "During my internship at the Edwards Research & Innovation Center (ERIC) at the University of Memphis, I applied ML classification models to 4 years of Choose901 alumni data to identify what drives student success. I engineered features, automated preprocessing pipelines in scikit-learn for reproducible training, and built interactive dashboards in Plotly and R to communicate findings. The model achieved 96% accuracy, and the results were adopted by City Leadership to restructure the program and improve data collection practices — real-world impact from a data project.",
     tech: ["Python", "R", "Excel", "Pandas", "scikit-learn", "Plotly"],
     github: null,
-    tag: "Data Analytics", col: C.pink,
+    tag: "Data Analytics", col: C.ochre,
     images: []
   },
   {
@@ -43,7 +61,7 @@ const PROJECTS = [
     details: "OphthoAI accepts patient-reported symptoms and produces a full clinical output: matching ICD-10 code, CPT billing code, severity classification (Mild / Moderate / Severe / Critical), prescription recommendation, and an ML confidence score. The system runs in two modes — a Flask-served web UI with symptom autocomplete and color-coded severity badges, and a CLI batch mode that processes a symptoms.csv file for multiple patients at once. ICD-10 feature engineering converts the hierarchical ophthalmology code structure (H00–H59) into numerical ML features encoding anatomical category, subcategory, code specificity, and laterality. A RandomForest classifier trained on those structural features combined with symptom keyword vectors predicts both condition and severity. A Flask REST API exposes four endpoints for diagnosis, retrieval, and condition lookup, backed by a SQLite database with conditions, diagnoses, and audit_log tables, every query is traceable with a UTC timestamp.",
     tech: ["Python", "Flask", "SQL", "scikit-learn"],
     github: "https://github.com/Munya574/Eye-Disease-Diagnostics-System.git",
-    tag: "Healthcare AI", col: C.pink,
+    tag: "Healthcare AI", col: C.ochre,
     images: []
   },
   {
@@ -52,7 +70,7 @@ const PROJECTS = [
     details: "Built a complete ML pipeline for breast cancer detection using the Wisconsin Diagnostic dataset. Trained and compared 5 model types; Logistic Regression, Decision Tree, SVM, KNN, and Random Forest; using both scikit-learn and PyTorch. The end-to-end pipeline covers preprocessing, feature engineering, cross-validation, and evaluation across F1, precision, and recall. In medical diagnostics, false negatives carry higher stakes than false positives, which shaped every modeling decision. The top performing model was the Logistic Regression model, achieving 99% accuracy, tracked and logged via MLflow.",
     tech: ["Python", "PyTorch", "scikit-learn", "Pandas", "NumPy", "MLflow"],
     github: "https://github.com/Munya574/TechWise-Project-2.git",
-    tag: "Machine Learning", col: C.cyan,
+    tag: "Machine Learning", col: C.moss,
     images: []
   },
   {
@@ -61,7 +79,7 @@ const PROJECTS = [
     details: "As Product Lead, I collaborated on Mementoria, a full-stack web-app where users preserve memories through written entries, photo uploads, and audio recordings. Built with React on the frontend and Node.js on the backend, with a PostgreSQL/Prisma data layer designed to support concurrent multi-user sessions. I designed the relational data model, built the REST API endpoints, and coordinated a 4-person team from architecture to production ship in 4 weeks.",
     tech: ["React", "Node.js", "PostgreSQL", "Prisma", "Tailwind CSS"],
     github: "https://github.com/Munya574/mementoria.git",
-    tag: "Web App", col: C.purple,
+    tag: "Web App", col: C.clay,
     images: []
   },
   {
@@ -70,7 +88,7 @@ const PROJECTS = [
     details: "Faculty-supervised research at Grambling State University examining DEI trends across the technology industry. The work combines systematic literature review with quantitative analysis of workforce demographics, hiring pipelines, and retention rates at major tech firms. Findings were compiled into a formal research report documenting structural barriers and evidence-based interventions for improving DEI outcomes in STEM fields.",
     tech: ["Python", "Data Analysis", "Research Methods"],
     github: null,
-    tag: "Research", col: C.purple,
+    tag: "Research", col: C.clay,
     images: []
   }
 ];
@@ -83,7 +101,7 @@ const CERTIFICATIONS = [
     desc: "Selected for NASA's L'SPACE Mission Concept Academy — a competitive 15-week program where I worked on an interdisciplinary team to develop a complete spacecraft mission concept following actual NASA engineering procedures, earning all 7 skill badges.",
     details: "L'SPACE — Lucy Student Pipeline Accelerator and Competency Enabler — is a NASA workforce development program administered with Arizona State University. In the Mission Concept Academy, I worked within an interdisciplinary team to produce a complete Preliminary Design Review (PDR) mission concept, following the same procedures NASA engineering teams use in practice. The work spanned spacecraft design, science traceability, systems engineering, risk identification, and thermal analysis, using Siemens NX for CAD modeling and JMARS for planetary data analysis. Each of the seven skill modules requires passing an assessment before the badge appears on your completion certificate. I earned all seven: Teaming, Project Management, Requirements Engineering, Systems Engineering, Siemens NX, Heat Transfer, and Risk Management.",
     tag: "NASA / Space",
-    col: C.purple,
+    col: C.clay,
     skills: ["Systems Engineering", "Project Management", "Requirements Engineering", "Siemens NX (CAD)", "Heat Transfer", "Risk Management", "Teaming"],
     credential: "#",
     images: [mcaImg]
@@ -95,7 +113,7 @@ const CERTIFICATIONS = [
     desc: "In this 12-week NASA L'SPACE program, my team wrote a full proposal responding to a real NASA solicitation; competing for a $10,000 prize. In addition, we served as proposal evaluators, scoring peer submissions using the same criteria NASA applies to actual funding decisions.",
     details: "The NASAProposal Writing and Evaluation Experience (NPWEE)is part of the NASA L'SPACE program family, sponsored by NASA's Marshall Space Flight Center. Over 12 weeks, my team identified a genuine gap in NASA's exploration priorities, developed a technical solution, and submitted a formal written proposal competing for a $10,000 prize. The second phase shifted our role entirely: we evaluated peer proposals using the same criteria NASA applies to real funding solicitations. Moving between the role of author and evaluator gave me a clearer understanding of what makes technical communication persuasive, and where proposals typically fall apart.",
     tag: "NASA / Space",
-    col: C.cyan,
+    col: C.moss,
     skills: ["Proposal Writing", "Technical Writing", "Peer Review", "NASA Solicitations", "Problem Framing", "Siemens NX (CAD)"],
     credential: "#",
     images: [npweeImg]
@@ -107,10 +125,34 @@ const CERTIFICATIONS = [
     desc: "Selected for TechWise, a competitive, fully Google-funded 18-month software engineering program with 150 seats per cohort, mentorship from Google engineers, and a certificate from CMU's School of Computer Science.",
     details: "TechWise is a fully Google-funded software engineering program run by TalentSprint, designed to increase representation in the technology industry. Admission is competitive (150 seats per cohort). Over 18 months at 12–15 hours per week, the curriculum spans five areas: Computational Thinking, Data Structures and Algorithms, Web Development (JavaScript, REST APIs, Express.js, PostgreSQL, CI/CD), Generative AI, and Machine Learning. Mentorship is structured across three tiers: TalentSprint instructors for technical content, Google engineers for professional development, and Carnegie Mellon University's School of Computer Science faculty for masterclasses. Graduates receive a certificate of completion from CMU's School of Computer Science Executive and Professional Education program.",
     tag: "Tech Accelerator",
-    col: C.cyan,
+    col: C.moss,
     skills: ["Data Structures & Algorithms", "Web Development", "JavaScript", "REST APIs", "Generative AI", "Machine Learning", "CI/CD"],
     credential: "#",
     images: [techwiseImg]
+  },
+  {
+    title: "AI201: Applications of AI Engineering",
+    issuer: "CodePath",
+    date: "2026",
+    desc: "The intermediate course in CodePath's Applied AI Engineering pathway (AI110 → AI201 → AI301): designing complex AI systems, evaluating AI-generated code, and working in existing production codebases. I built six projects, including RAG, agents, and a fine-tuned classifier.",
+    details: "AI201 is the intermediate course in CodePath's Applied AI Engineering pathway, which runs AI110 → AI201 → AI301. It is a 10-week, virtual, instructor-led course on designing and developing complex systems, evaluating AI-generated code, and automating backend integrations. I completed it in Summer 2026. Across six projects, I built a RAG system that makes student reviews of Grambling professors searchable with sourced answers, FitFindr (a multi-tool thrifting agent whose planning loop branches on tool results and fails gracefully when a search comes up empty), and TakeMeter (a fine-tuned classifier that separates detailed from low-effort questions on r/sewing, trained on data I annotated myself). I also built Provenance Guard, a backend service that estimates whether text was written by a human or by AI. It is designed around asymmetric error cost, so it would rather say \"uncertain\" than falsely accuse a human writer. The final two projects were a bug hunt in an existing Flask codebase and a simulated code review, both practice in reading, fixing, and critiquing code written by someone else.",
+    tag: "AI Engineering",
+    col: C.moss,
+    skills: ["RAG", "AI Agents & Tool Use", "Fine-tuning", "LLM Evaluation", "Flask", "Debugging", "Code Review", "Testing"],
+    credential: "#",
+    images: [ai201Img]
+  },
+  {
+    title: "WEB101: Intro to Web Development (Honors)",
+    issuer: "CodePath",
+    date: "2026",
+    desc: "CodePath's 10-week intro to web development, completed with Honors in Summer 2026: building responsive, interactive user interfaces with HTML, CSS, and modern JavaScript.",
+    details: "WEB101 is the introductory course in CodePath's Web Development pathway: a 10-week, virtual, instructor-led course focused on responsive design and client-side development. Over the course I built interactive, fluid user interfaces with HTML, CSS, and modern JavaScript. Topics included Flexbox and page layout, asynchronous JavaScript with async/await, animation, and web design principles. I completed it in Summer 2026 with Honors, which CodePath awards for outstanding performance in the course.",
+    tag: "Web Development",
+    col: C.ochre,
+    skills: ["HTML", "CSS", "JavaScript", "Responsive Design", "Flexbox & Layout", "Async/Await", "Animation", "Web Design Principles"],
+    credential: "#",
+    images: [web101Img]
   },
   {
     title: "AI110: Foundations of AI Engineering",
@@ -119,7 +161,7 @@ const CERTIFICATIONS = [
     desc: "10-week CodePath course in AI engineering — built AI-assisted applications while developing hands-on skills in Python, data structures, RAG, agentic workflows, and prompt engineering.",
     details: "AI110 is CodePath's Foundations of AI Engineering course and the entry point to their Applied AI Engineering pathway. Over 10 weeks at 4–6 hours per week, the curriculum covers Python, data structures, algorithms, and object-oriented programming — with AI embedded directly into the coding process rather than treated as a separate topic. Core areas include ML literacy across supervised, unsupervised, and generative models; prompt engineering and critical evaluation of AI-generated code; Retrieval-Augmented Generation (RAG); agentic workflows; lightweight fine-tuning; and AI guardrails. Students use Git and GitHub throughout and build portfolio-ready applications including chatbots and summarization tools. Enrolled students receive complimentary access to Claude Code for the duration of the course.",
     tag: "AI Engineering",
-    col: C.cyan,
+    col: C.moss,
     skills: ["Python", "Data Structures & Algorithms", "Prompt Engineering", "RAG", "Agentic Workflows", "ML Literacy", "Git & GitHub", "Claude Code"],
     credential: "#",
     images: [ai110Img]
@@ -131,7 +173,7 @@ const CERTIFICATIONS = [
     desc: "10-week CodePath course developed with Meta: hands-on work across network traffic analysis, malware behavior, intrusion detection, and a full incident response capstone using Wireshark, Wazuh, and Splunk.",
     details: "CodePath's Cybersecurity 101 was developed in collaboration with Meta for students with no prior security background. Over 10 weeks, the curriculum covered Linux fundamentals, cryptography and access control, network traffic analysis with Wireshark, malware behavior, social engineering, and intrusion detection with Wazuh. The second half focused on incident response, working through the NIST framework and investigating simulated attacks in Splunk. The course concluded with a group capstone where we handled a full attack scenario from initial detection through response and post-incident documentation.",
     tag: "Cybersecurity",
-    col: C.pink,
+    col: C.ochre,
     skills: ["Linux CLI", "Network Analysis", "Wireshark", "Malware Analysis", "Incident Response", "Wazuh", "Splunk", "NIST Framework"],
     credential: "#",
     images: [codepathImg]
@@ -143,7 +185,7 @@ const CERTIFICATIONS = [
     desc: "Completed Indeed's Job Search Academy across all five modules: resume writing, interview preparation, offer evaluation, salary negotiation, and career management, earning the Job Search All-Star designation.",
     details: "I completed Indeed's Job Search Academy to develop a more deliberate approach to the job search process, the strategy behind it, not just the mechanics of applying. The five modules cover resume writing, interview preparation through a structured framework, evaluating job offers, negotiating compensation, and managing your career over the long term. The live webinars with Indeed's Career Strategists were particularly valuable. They offered direct insight into how hiring decisions get made and what distinguishes candidates at each stage. Completing all five modules earns the Job Search All-Star designation.",
     tag: "Professional Development",
-    col: C.cyan,
+    col: C.moss,
     skills: ["Resume Writing", "Interview Prep", "Salary Negotiation", "Job Search Strategy", "Offer Evaluation", "Career Management"],
     credential: "#",
     images: [indeedImg]
@@ -155,7 +197,7 @@ const CERTIFICATIONS = [
     desc: "Certified in Mental Health First Aid. Trained to recognize and respond to mental health crises using the ALGEE action plan, covering depression, anxiety, psychosis, substance use, and suicidal ideation.",
     details: "I pursued this certification in direct response to my role as a Senior Resident Assistant, where I am frequently the first point of contact for students in distress. Mental Health First Aid is an 8-hour evidence-based certification recognized across 51 countries and supported by over 90 peer-reviewed studies. The core framework is the ALGEE Action Plan: Assess for risk, Listen nonjudgmentally, Give reassurance and information, Encourage professional help, and Encourage self-help and other support strategies. The training addresses specific conditions — depression, anxiety disorders, psychosis, substance use disorders, suicidal ideation, and acute trauma — each with defined warning signs and appropriate responses. I apply this training regularly in my work supporting students on campus. The certification is valid for three years.",
     tag: "Health & Wellness",
-    col: C.purple,
+    col: C.clay,
     skills: ["ALGEE Action Plan", "Crisis Response", "Suicide Risk Assessment", "Active Listening", "Mental Health Awareness", "Substance Use", "Trauma Response"],
     credential: "#",
     images: [mentalImg]
@@ -163,39 +205,15 @@ const CERTIFICATIONS = [
 ];
 
 const SKILLS = [
-  { cat: "Languages", items: ["Python", "C++", "SQL", "R", "Java", "JavaScript"], col: C.purple },
-  { cat: "AI & Machine Learning", items: ["PyTorch", "TensorFlow", "scikit-learn", "Pandas", "NumPy", "Plotly", "MLflow", "Hugging Face", "Weights & Biases"], col: C.cyan },
-  { cat: "Web Development", items: ["React", "Node.js", "PostgreSQL", "Prisma", "Flask", "Tailwind CSS"], col: C.pink },
-  { cat: "Tools & Platforms", items: ["Git", "Figma", "Tableau", "PowerBI", "GitHub"], col: C.purple }
+  { cat: "Product", items: ["User research & discovery", "MVP scoping", "Success metrics & OKRs", "Build-vs-buy analysis", "Roadmap prioritization", "Agile / sprint planning", "Stakeholder presentation", "Figma"], col: C.clay },
+  { cat: "Languages", items: ["Python", "C++", "SQL", "R", "Java", "JavaScript"], col: C.clay },
+  { cat: "AI & Machine Learning", items: ["PyTorch", "TensorFlow", "scikit-learn", "Pandas", "NumPy", "Plotly", "MLflow", "Hugging Face", "Weights & Biases"], col: C.moss },
+  { cat: "Web Development", items: ["React", "Node.js", "PostgreSQL", "Prisma", "Flask", "Tailwind CSS"], col: C.ochre },
+  { cat: "Tools & Platforms", items: ["Git", "Figma", "Tableau", "PowerBI", "GitHub"], col: C.clay }
 ];
 
-function Tag({ label, color }) {
-  return (
-    <span style={{ fontSize: 11, fontWeight: 700, color, background: color + "22", padding: "3px 10px", borderRadius: 20, letterSpacing: 1.2, textTransform: "uppercase" }}>
-      {label}
-    </span>
-  );
-}
 
-function SectionTitle({ text, col }) {
-  return (
-    <div style={{ marginBottom: 32 }}>
-      <h2 style={{ fontSize: 26, fontWeight: 800, color: C.text, marginBottom: 6 }}>{text}</h2>
-      <div style={{ height: 3, width: 48, borderRadius: 2, background: `linear-gradient(90deg, ${col}, transparent)` }} />
-    </div>
-  );
-}
-
-function ResumeRow({ main, sub, col }) {
-  return (
-    <div style={{ paddingLeft: 14, borderLeft: `2px solid ${col}55`, marginBottom: 12 }}>
-      <div style={{ fontSize: 14, fontWeight: 600, color: C.text }}>{main}</div>
-      <div style={{ fontSize: 13, color: C.muted }}>{sub}</div>
-    </div>
-  );
-}
-
-function Modal({ item, onClose }) {
+function useModalBehavior(onClose) {
   useEffect(() => {
     const h = e => e.key === "Escape" && onClose();
     window.addEventListener("keydown", h);
@@ -205,152 +223,73 @@ function Modal({ item, onClose }) {
       document.body.style.overflow = "";
     };
   }, [onClose]);
+}
 
+function Tag({ label, color }) {
+  return <span className="tag" style={{ "--c": color }}>{label}</span>;
+}
+
+function SectionHead({ title, kicker }) {
+  return (
+    <header className="section-head reveal">
+      <span className="eyebrow">{kicker}</span>
+      <h2>{title}</h2>
+    </header>
+  );
+}
+
+function Stats({ stats, col }) {
+  return (
+    <dl className="stats" style={{ "--c": col }}>
+      {stats.map(s => (
+        <div key={s.label} className="stat">
+          <dt>{s.label}</dt>
+          <dd>{s.value}</dd>
+        </div>
+      ))}
+    </dl>
+  );
+}
+
+function Modal({ item, onClose }) {
+  useModalBehavior(onClose);
   const d = item.data;
   const isProject = item.type === "project";
 
   return (
-    <div
-      onClick={onClose}
-      style={{
-        position: "fixed", inset: 0,
-        background: "rgba(0,0,0,0.72)",
-        backdropFilter: "blur(6px)",
-        zIndex: 300,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        padding: "20px"
-      }}
-    >
-      <div
-        onClick={e => e.stopPropagation()}
-        style={{
-          background: C.card,
-          border: `1px solid ${d.col}55`,
-          borderRadius: 18,
-          padding: "36px 40px",
-          maxWidth: 640,
-          width: "100%",
-          maxHeight: "85vh",
-          overflowY: "auto",
-          position: "relative",
-          boxShadow: `0 32px 80px rgba(0,0,0,0.6), 0 0 0 1px ${d.col}22, inset 0 1px 0 ${d.col}18`
-        }}
-      >
-        {/* Close button */}
-        <button
-          onClick={onClose}
-          style={{
-            position: "absolute", top: 16, right: 16,
-            background: C.surface,
-            border: `1px solid ${C.border}`,
-            color: C.muted,
-            borderRadius: 8,
-            width: 32, height: 32,
-            cursor: "pointer",
-            fontSize: 18,
-            display: "flex", alignItems: "center", justifyContent: "center",
-            lineHeight: 1
-          }}
-        >
-          ×
-        </button>
+    <div className="overlay" onClick={onClose}>
+      <div className="modal" role="dialog" aria-modal="true" aria-label={d.title}
+        onClick={e => e.stopPropagation()} style={{ "--c": d.col }}>
+        <button className="close" onClick={onClose} aria-label="Close">×</button>
 
-        {/* Header */}
-        <div style={{ marginBottom: 20, paddingRight: 40 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 12, flexWrap: "wrap" }}>
-            <Tag label={d.tag} color={d.col} />
-            {!isProject && (
-              <span style={{ fontSize: 13, color: C.dim }}>{d.issuer} · {d.date}</span>
-            )}
-          </div>
-          <h2 style={{ fontSize: 22, fontWeight: 800, color: C.text, lineHeight: 1.3, marginBottom: 0 }}>
-            {d.title}
-          </h2>
+        <div className="modal-meta">
+          <Tag label={d.tag} color={d.col} />
+          {d.status && <Tag label={d.status} color={C.ochre} />}
+          {!isProject && <span className="mono muted">{d.issuer} · {d.date}</span>}
         </div>
+        <h2 className="modal-title">{d.title}</h2>
+        {d.tagline && <p className="modal-tagline">{d.tagline}</p>}
 
-        {/* Images */}
+        {d.stats && <Stats stats={d.stats} col={d.col} />}
+
         {d.images && d.images.length > 0 && (
-          <div style={{ display: "flex", gap: 10, marginBottom: 24, flexWrap: "wrap" }}>
-            {d.images.map((img, i) => (
-              <img
-                key={i}
-                src={img}
-                alt={`${d.title} ${i + 1}`}
-                style={{
-                  borderRadius: 10,
-                  maxHeight: 200,
-                  maxWidth: "100%",
-                  objectFit: "cover",
-                  border: `1px solid ${C.border}`
-                }}
-              />
-            ))}
+          <div className="modal-images">
+            {d.images.map((img, i) => <img key={i} src={img} alt={`${d.title} ${i + 1}`} />)}
           </div>
         )}
 
-        {/* Details */}
-        <p style={{ color: C.muted, fontSize: 14.5, lineHeight: 1.78, marginBottom: 26 }}>
-          {d.details || d.desc}
-        </p>
+        <p className="modal-body">{d.details || d.desc}</p>
 
-        {/* Divider */}
-        <div style={{ height: 1, background: C.border, marginBottom: 22 }} />
+        <p className="eyebrow">{isProject ? "Tech stack" : "Skills covered"}</p>
+        <ul className="chips">
+          {(isProject ? d.tech : d.skills).map(t => <li key={t}>{t}</li>)}
+        </ul>
 
-        {/* Tech / Skills */}
-        <div style={{ marginBottom: 26 }}>
-          <p style={{ fontSize: 11, fontWeight: 800, textTransform: "uppercase", letterSpacing: 1.4, color: d.col, marginBottom: 10 }}>
-            {isProject ? "Tech Stack" : "Skills Covered"}
-          </p>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 7 }}>
-            {(isProject ? d.tech : d.skills).map(t => (
-              <span key={t} style={{ fontSize: 12, color: C.dim, background: C.surface, border: `1px solid ${C.border}`, padding: "4px 11px", borderRadius: 6 }}>
-                {t}
-              </span>
-            ))}
-          </div>
-        </div>
-
-        {/* Links */}
-        <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
-          {isProject && d.github && (
-            <a
-              href={d.github}
-              target="_blank"
-              rel="noreferrer"
-              style={{
-                padding: "9px 22px",
-                borderRadius: 9,
-                background: d.col + "18",
-                border: `1px solid ${d.col}55`,
-                color: d.col,
-                textDecoration: "none",
-                fontSize: 13,
-                fontWeight: 700
-              }}
-            >
-              ↗ View on GitHub
-            </a>
-          )}
+        <div className="actions">
+          {isProject && d.live && <a className="btn btn-solid" href={d.live} target="_blank" rel="noreferrer">{d.status ? "Try the preview ↗" : "Live app ↗"}</a>}
+          {isProject && d.github && <a className="btn btn-line" href={d.github} target="_blank" rel="noreferrer">View code ↗</a>}
           {!isProject && d.credential && d.credential !== "#" && (
-            <a
-              href={d.credential}
-              target="_blank"
-              rel="noreferrer"
-              style={{
-                padding: "9px 22px",
-                borderRadius: 9,
-                background: d.col + "18",
-                border: `1px solid ${d.col}55`,
-                color: d.col,
-                textDecoration: "none",
-                fontSize: 13,
-                fontWeight: 700
-              }}
-            >
-              ↗ View Credential
-            </a>
+            <a className="btn btn-line" href={d.credential} target="_blank" rel="noreferrer">View credential ↗</a>
           )}
         </div>
       </div>
@@ -359,349 +298,321 @@ function Modal({ item, onClose }) {
 }
 
 function ResumeModal({ onClose }) {
-  useEffect(() => {
-    const h = e => e.key === "Escape" && onClose();
-    window.addEventListener("keydown", h);
-    document.body.style.overflow = "hidden";
-    return () => {
-      window.removeEventListener("keydown", h);
-      document.body.style.overflow = "";
-    };
-  }, [onClose]);
-
+  useModalBehavior(onClose);
   return (
-    <div
-      onClick={onClose}
-      style={{
-        position: "fixed", inset: 0,
-        background: "rgba(0,0,0,0.82)",
-        backdropFilter: "blur(6px)",
-        zIndex: 300,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        padding: "24px"
-      }}
-    >
-      <div
-        onClick={e => e.stopPropagation()}
-        style={{
-          position: "relative",
-          width: "100%",
-          maxWidth: 860,
-          height: "90vh",
-          background: C.card,
-          border: `1px solid ${C.border}`,
-          borderRadius: 14,
-          overflow: "hidden",
-          display: "flex",
-          flexDirection: "column"
-        }}
-      >
-        {/* Toolbar */}
-        <div style={{
-          display: "flex", alignItems: "center", justifyContent: "space-between",
-          padding: "12px 16px",
-          borderBottom: `1px solid ${C.border}`,
-          background: C.surface,
-          flexShrink: 0
-        }}>
-          <span style={{ fontSize: 13, fontWeight: 600, color: C.muted }}>Chilawo Munene — Resume</span>
-          <div style={{ display: "flex", gap: 8 }}>
-            <a
-              href={resumePDF}
-              download="ChilawoMunene-Resume.pdf"
-              style={{
-                padding: "6px 16px", borderRadius: 7,
-                background: `linear-gradient(135deg,${C.purpleD},${C.cyanD})`,
-                color: "#fff", fontSize: 13, fontWeight: 700,
-                textDecoration: "none", whiteSpace: "nowrap"
-              }}
-            >
-              ↓ Download
-            </a>
-            <button
-              onClick={onClose}
-              style={{
-                background: C.card, border: `1px solid ${C.border}`,
-                color: C.muted, borderRadius: 7,
-                width: 32, height: 32, cursor: "pointer",
-                fontSize: 18, display: "flex", alignItems: "center", justifyContent: "center"
-              }}
-            >
-              ×
-            </button>
+    <div className="overlay" onClick={onClose}>
+      <div className="modal modal-resume" role="dialog" aria-modal="true" aria-label="Resume" onClick={e => e.stopPropagation()}>
+        <div className="resume-bar">
+          <span className="mono muted">Chilawo Munene — Résumé</span>
+          <div className="resume-bar-actions">
+            <a className="btn btn-solid btn-sm" href={resumePDF} download="ChilawoMunene-Resume.pdf">↓ Download</a>
+            <button className="close close-inline" onClick={onClose} aria-label="Close">×</button>
           </div>
         </div>
-
-        {/* PDF viewer */}
-        <iframe
-          src={resumePDF}
-          title="Resume"
-          style={{ flex: 1, width: "100%", border: "none" }}
-        />
+        <iframe src={resumePDF} title="Resume" />
       </div>
     </div>
   );
 }
 
+const PRODUCT_DECISIONS = [
+  {
+    evidence: "11 of 20",
+    found: "people I surveyed before writing any code had a checking method fail them.",
+    decision: "I reframed the problem from missing information to unreadable labels, and scoped the MVP around reading them: barcode, label photo, or pasted text."
+  },
+  {
+    evidence: "About half",
+    found: "described the social cost of asking questions in restaurants and friends' kitchens.",
+    decision: "I built the chef card, a profile sized to hand to kitchen staff, and didn't build restaurant cross-contact checking, which had no data source behind it."
+  },
+  {
+    evidence: "860 of 1,073",
+    found: "tree-nut flags across 14,798 products turned out to be coconut.",
+    decision: "I reversed my own FDA-based rule. Precision rose 27 points at a cost of 0.6 points of recall."
+  },
+  {
+    evidence: "F1 = 0.0",
+    found: "from the fine-tuned DistilBERT model I had planned to rely on.",
+    decision: "I shipped auditable rules instead (94.5% recall), which also cut about 2 GB of dependencies. For a safety decision, explainable beats impressive."
+  },
+  {
+    evidence: "Never",
+    found: "will Pona call a food “safe.”",
+    decision: "I defined what the product refuses to do: no safety verdicts, no nutrition ratings, and an explicit error for unbuilt features instead of a plausible guess."
+  },
+  {
+    evidence: "2 cut",
+    found: "conditions, MSG sensitivity and gout, because the evidence didn't support them.",
+    decision: "Fewer, well-scoped conditions I can stand behind beat a longer list I can't."
+  }
+];
+
+const PRODUCT_ELSEWHERE = [
+  { where: "Mementoria · Product Lead", what: "Led a 4-person team to production in 4 weeks, cutting non-essential features to protect the launch date. I wrote the data model and API contract as the spec both sides built against, so frontend and backend could work in parallel." },
+  { where: "Choose901 · Data Analytics Intern", what: "Turned a nonprofit's open-ended question into a measurable analysis, then shipped dashboards non-technical decision-makers could use themselves. City Leadership used them to restructure the program." },
+  { where: "Research Summarizer Agent", what: "Designed the 6-section output around the reader's decisions rather than the model's capabilities, and delivered it to an external partner as a working demo instead of a spec." }
+];
+
+const HONORS = [
+  "EICOP 2026 Finalist",
+  "Earl Lester Cole Honors Student",
+  "President's List",
+  "TechWise Fellow",
+  "NASA L'SPACE Scholar",
+  "ColorStack Fellow"
+];
+
+const TIMELINE = [
+  { when: "Jun – Jul 2025", what: "Data Analytics Intern", where: "Edwards Research & Innovation Center · University of Memphis" },
+  { when: "Aug 2024 – Present", what: "Senior Resident Assistant", where: "Grambling State University" },
+  { when: "Jan 2024 – Dec 2027", what: "B.S. Computer Science, Biology Minor · GPA 3.9/4.0", where: "Grambling State University" }
+];
+
 export default function Portfolio() {
   const [activeNav, setActiveNav] = useState("About");
-  const [hovered, setHovered] = useState(null);
   const [selectedItem, setSelectedItem] = useState(null);
   const [showResume, setShowResume] = useState(false);
-  const refs = useRef({});
 
   useEffect(() => {
     const obs = new IntersectionObserver(entries => {
       entries.forEach(e => { if (e.isIntersecting) setActiveNav(e.target.dataset.sec); });
-    }, { threshold: 0.25 });
-    Object.values(refs.current).forEach(r => r && obs.observe(r));
+    }, { rootMargin: "-40% 0px -55% 0px" });
+    document.querySelectorAll("[data-sec]").forEach(el => obs.observe(el));
     return () => obs.disconnect();
   }, []);
 
-  const sec = id => ({ ref: el => refs.current[id] = el, "data-sec": id });
-  const scrollTo = id => refs.current[id]?.scrollIntoView({ behavior: "smooth", block: "start" });
+  useEffect(() => {
+    const els = document.querySelectorAll(".reveal");
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add("in"); obs.unobserve(e.target); }
+      });
+    }, { threshold: 0.12 });
+    els.forEach(el => obs.observe(el));
+    return () => obs.disconnect();
+  }, []);
 
-  const openProject = (p) => setSelectedItem({ type: "project", data: p });
-  const openCert = (c) => setSelectedItem({ type: "cert", data: c });
+  const sec = id => ({ "data-sec": id, id: id.toLowerCase() });
+  const scrollTo = id => document.getElementById(id.toLowerCase())?.scrollIntoView({ behavior: "smooth", block: "start" });
+
+  const openProject = p => setSelectedItem({ type: "project", data: p });
+  const openCert = c => setSelectedItem({ type: "cert", data: c });
+
+  const featured = PROJECTS.find(p => p.featured);
+  const others = PROJECTS.filter(p => !p.featured);
 
   return (
-    <div style={{ background: C.bg, color: C.text, fontFamily: "system-ui,-apple-system,sans-serif", minHeight: "100vh" }}>
+    <div className="site">
       <Analytics />
 
-      {/* MODAL */}
       {selectedItem && <Modal item={selectedItem} onClose={() => setSelectedItem(null)} />}
       {showResume && <ResumeModal onClose={() => setShowResume(false)} />}
 
       {/* NAV */}
-      <nav style={{ position: "sticky", top: 0, zIndex: 99, background: "rgba(8,8,14,0.88)", backdropFilter: "blur(14px)", borderBottom: `1px solid ${C.border}` }}>
-        <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 20px", height: 54, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <span style={{ fontWeight: 800, fontSize: 17, background: `linear-gradient(120deg,${C.purple},${C.cyan})`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
-            CM
-          </span>
-          <div style={{ display: "flex", gap: 4 }}>
+      <nav className="nav">
+        <div className="wrap nav-inner">
+          <button className="brand" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
+            Chilawo Munene<span className="dot" aria-hidden="true">.</span>
+          </button>
+          <div className="nav-links">
             {NAV.map(n => (
-              <button key={n} onClick={() => scrollTo(n)}
-                style={{ background: "none", border: "none", cursor: "pointer", padding: "6px 12px", borderRadius: 7, fontSize: 13, fontWeight: activeNav === n ? 700 : 400, color: activeNav === n ? C.purple : C.muted, transition: "color .2s" }}>
-                {n}
-              </button>
+              <button key={n} onClick={() => scrollTo(n)} className={activeNav === n ? "active" : ""}>{n}</button>
             ))}
+            <button className="btn btn-line btn-sm" onClick={() => setShowResume(true)}>Résumé</button>
           </div>
         </div>
       </nav>
 
-      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 20px" }}>
+      <main className="wrap">
 
-        {/* ABOUT / HERO */}
-        <section {...sec("About")} style={{ padding: "80px 0 64px", position: "relative", overflow: "hidden" }}>
-          {/* ambient glow */}
-          <div style={{ position: "absolute", top: -80, left: -120, width: 380, height: 380, borderRadius: "50%", background: `radial-gradient(circle, ${C.purpleD}44 0%, transparent 65%)`, pointerEvents: "none" }} />
-          <div style={{ position: "absolute", top: 60, right: -80, width: 260, height: 260, borderRadius: "50%", background: `radial-gradient(circle, ${C.cyanD}44 0%, transparent 65%)`, pointerEvents: "none" }} />
-
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 48, flexWrap: "wrap" }}>
-            {/* Left: text content */}
-            <div style={{ flex: 1, minWidth: 280 }}>
-              <p style={{ color: C.cyan, fontSize: 13, fontWeight: 700, letterSpacing: 2.5, marginBottom: 14 }}>Hi, I'm Chilawo...but most people call me Munya.</p>
-              <h1 style={{ fontSize: 50, fontWeight: 900, lineHeight: 1.08, marginBottom: 20 }}>
-                <span style={{ background: `linear-gradient(120deg,${C.purple},${C.cyan},${C.pink})`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
-                  Chilawo Nchimunya Munene
-                </span>
-              </h1>
-              <div style={{ fontSize: 16, color: C.muted, maxWidth: 680, lineHeight: 1.75, marginBottom: 32, display: "flex", flexDirection: "column", gap: 16 }}>
-                <p style={{ margin: 0 }}>Growing up in Zambia, I watched technology function as a privilege. Present in the world, just not always in mine. That's the frame I bring to everything I build. I'm a Computer Science student at Grambling State University, and the question I keep coming back to is: what does it actually take to build systems that work for the people who need them most?</p>
-                <p style={{ margin: 0 }}>Most of my work lives at the intersection of AI and healthcare. I'm drawn to high-stakes problems where the gap between what's technically possible and what's actually accessible is still wide.</p>
-                <p style={{ margin: 0 }}>I'm also a TechWise Fellow (Google + CMU), a NASA L'SPACE alumnus, and a Senior Resident Assistant, which is a longer way of saying I don't think building good technology and showing up for people are separate things. Open to research collaborations, internships, and conversations at the intersection of AI, health equity, and impact.</p>
-              </div>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-                {["AI & Machine Learning", "Data Analytics", "Health Equity Tech", "Social Impact"].map(t => (
-                  <span key={t} style={{ fontSize: 13, color: C.dim, border: `1px solid ${C.border}`, padding: "4px 13px", borderRadius: 20 }}>{t}</span>
-                ))}
-              </div>
+        {/* HERO */}
+        <section className="hero" {...sec("About")}>
+          <div className="hero-text">
+            <p className="eyebrow reveal">Hi, I'm Chilawo — most people call me Munya.</p>
+            <h1 className="reveal">I aim to build for those who need it <em>most.</em></h1>
+            <p className="lead reveal">
+              I'm a Computer Science Junior at Grambling State University. I believe technology, especially AI, is the key to making healthcare efficient and accessible.
+            </p>
+            <div className="actions reveal">
+              <button className="btn btn-solid" onClick={() => scrollTo("Work")}>See my work ↓</button>
+              <button className="btn btn-line" onClick={() => setShowResume(true)}>View résumé</button>
             </div>
-
-            {/* Right: headshot */}
-            <div style={{ flexShrink: 0, position: "relative", marginRight: 40 }}>
-              {/* Glow ring behind photo */}
-              <div style={{
-                position: "absolute", inset: -4,
-                borderRadius: "50%",
-                background: `conic-gradient(${C.purple}, ${C.cyan}, ${C.pink}, ${C.purple})`,
-                zIndex: 0
-              }} />
-              <div style={{
-                position: "relative", zIndex: 1,
-                width: 240, height: 240,
-                borderRadius: "50%",
-                overflow: "hidden",
-                border: `4px solid ${C.bg}`
-              }}>
-                <img
-                  src={heroImg}
-                  alt="Chilawo Munene"
-                  style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
-                />
-              </div>
+          </div>
+          <figure className="portrait reveal">
+            <div className="portrait-frame">
+              <img src={heroImg} alt="Chilawo Munene" />
             </div>
+            <figcaption className="mono">From Zambia to Grambling, Louisiana</figcaption>
+          </figure>
+        </section>
+
+        <ul className="honor-strip reveal" aria-label="Honors">
+          {HONORS.map(h => <li key={h}>{h}</li>)}
+        </ul>
+
+        {/* ABOUT */}
+        <section className="about split">
+          <SectionHead kicker="About" title="Why I build" />
+          <div className="prose reveal">
+            <p className="dropcap">Growing up in Zambia, I watched technology function as a privilege. Present in the world, just not always in mine. That's the frame I bring to everything I build. The question I keep coming back to is: what does it actually take to build systems that work for the people who need them most?</p>
+            <p>Most of my work lives at the intersection of AI and healthcare. I'm drawn to high-stakes problems where the gap between what's technically possible and what's actually accessible is still wide.</p>
+            <p>I'm also a TechWise Fellow (Google + CMU), a NASA L'SPACE alumnus, and a Senior Resident Assistant, which is a longer way of saying I don't think building good technology and showing up for people are separate things. Open to research collaborations, internships, and conversations at the intersection of AI, health equity, and impact.</p>
+            <ul className="chips">
+              {["AI & Machine Learning", "Data Analytics", "Health Equity Tech", "Social Impact"].map(t => <li key={t}>{t}</li>)}
+            </ul>
           </div>
         </section>
 
-        {/* PROJECTS */}
-        <section {...sec("Projects")} style={{ paddingBottom: 64 }}>
-          <SectionTitle text="Projects" col={C.purple} />
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(360px,1fr))", gap: 18 }}>
-            {PROJECTS.map((p, i) => (
-              <div key={i}
-                onClick={() => openProject(p)}
-                onMouseEnter={() => setHovered(`p${i}`)}
-                onMouseLeave={() => setHovered(null)}
-                style={{
-                  background: C.card, borderRadius: 14, padding: 24,
-                  border: `1px solid ${hovered === `p${i}` ? p.col + "55" : C.border}`,
-                  transition: "all .25s",
-                  transform: hovered === `p${i}` ? "translateY(-5px)" : "none",
-                  boxShadow: hovered === `p${i}` ? `0 12px 36px ${p.col}18` : "none",
-                  cursor: "pointer"
-                }}>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
-                  <Tag label={p.tag} color={p.col} />
-                  <span style={{ fontSize: 12, color: C.dim }}>Click for details</span>
+        {/* WORK */}
+        <section {...sec("Work")}>
+          <SectionHead kicker="Selected work" title="Things I've built" />
+
+          {featured && (
+            <article className="featured reveal" style={{ "--c": featured.col }}>
+              <div className="featured-text">
+                <div className="featured-meta">
+                  <Tag label="Featured" color={featured.col} />
+                  {featured.status && <Tag label={featured.status} color={C.ochre} />}
+                  <span className="mono muted">{featured.tag} · Solo build · 2026</span>
                 </div>
-                <h3 style={{ fontSize: 17, fontWeight: 700, marginBottom: 10 }}>{p.title}</h3>
-                <p style={{ color: C.muted, fontSize: 13.5, lineHeight: 1.68, marginBottom: 16 }}>{p.desc}</p>
-                <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-                  {p.tech.map(t => (
-                    <span key={t} style={{ fontSize: 12, color: C.dim, background: C.surface, border: `1px solid ${C.border}`, padding: "2px 9px", borderRadius: 5 }}>{t}</span>
-                  ))}
+                <h3>Pona</h3>
+                <p className="featured-tagline">{featured.tagline}</p>
+                <p className="featured-desc">{featured.desc}</p>
+                <div className="actions">
+                  <button className="btn btn-solid" onClick={() => openProject(featured)}>Read the case study</button>
+                  <a className="btn btn-line" href={featured.live} target="_blank" rel="noreferrer">{featured.status ? "Try the preview ↗" : "Live app ↗"}</a>
+                  <a className="btn btn-ghost" href={featured.github} target="_blank" rel="noreferrer">Code ↗</a>
                 </div>
               </div>
+              <Stats stats={featured.stats} col={featured.col} />
+            </article>
+          )}
+
+          <ol className="project-list">
+            {others.map(p => (
+              <li key={p.title} className="reveal">
+                <button className="project-row" onClick={() => openProject(p)} style={{ "--c": p.col }}>
+                  <span className="project-main">
+                    <span className="project-title">{p.title}</span>
+                    <span className="project-desc">{p.desc}</span>
+                    <span className="project-tech mono">{p.tech.join(" · ")}</span>
+                  </span>
+                  <span className="project-side">
+                    <Tag label={p.tag} color={p.col} />
+                    <span className="arrow" aria-hidden="true">→</span>
+                  </span>
+                </button>
+              </li>
             ))}
+          </ol>
+        </section>
+
+        {/* PRODUCT */}
+        <section {...sec("Product")}>
+          <SectionHead kicker="Product" title="How I decide what to build" />
+          <p className="product-intro reveal">
+            On Pona I was the product owner as well as the engineer. Every major call started with evidence,
+            and several of them reversed my own first instinct.
+          </p>
+
+          <div className="decisions-head reveal">
+            <span className="mono">Pona decision log</span>
+            <Tag label="Living document" color={C.ochre} />
+            <span className="muted">Pona is in active development, so these evolve. These are the latest calls and the evidence behind them.</span>
+          </div>
+          <ol className="decisions">
+            {PRODUCT_DECISIONS.map((d, i) => (
+              <li key={d.evidence} className="decision reveal">
+                <span className="mono muted">Decision {i + 1}</span>
+                <p className="decision-evidence"><strong>{d.evidence}</strong> {d.found}</p>
+                <p className="decision-call"><span className="decision-label">What I did:</span> {d.decision}</p>
+              </li>
+            ))}
+          </ol>
+
+          <div className="elsewhere reveal">
+            <p className="eyebrow">The same habits on other teams</p>
+            <ul>
+              {PRODUCT_ELSEWHERE.map(e => (
+                <li key={e.where}>
+                  <strong>{e.where}</strong>
+                  <span>{e.what}</span>
+                </li>
+              ))}
+            </ul>
           </div>
         </section>
 
-        {/* CERTIFICATIONS */}
-        <section {...sec("Certifications")} style={{ paddingBottom: 64 }}>
-          <SectionTitle text="Certifications" col={C.cyan} />
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(300px,1fr))", gap: 18 }}>
-            {CERTIFICATIONS.map((cert, i) => (
-              <div key={i}
-                onClick={() => openCert(cert)}
-                onMouseEnter={() => setHovered(`c${i}`)}
-                onMouseLeave={() => setHovered(null)}
-                style={{
-                  background: C.card, borderRadius: 14, padding: 24,
-                  border: `1px solid ${hovered === `c${i}` ? cert.col + "55" : C.border}`,
-                  transition: "all .25s",
-                  transform: hovered === `c${i}` ? "translateY(-5px)" : "none",
-                  boxShadow: hovered === `c${i}` ? `0 12px 36px ${cert.col}18` : "none",
-                  cursor: "pointer",
-                  display: "flex", flexDirection: "column"
-                }}>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
-                  <Tag label={cert.tag} color={cert.col} />
-                  <span style={{ fontSize: 12, color: C.dim }}>{cert.date}</span>
-                </div>
-                <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 6, color: C.text }}>{cert.title}</h3>
-                <p style={{ fontSize: 13, color: cert.col, fontWeight: 600, marginBottom: 10 }}>{cert.issuer}</p>
-                <p style={{ color: C.muted, fontSize: 13, lineHeight: 1.65, marginBottom: 16, flex: 1 }}>{cert.desc}</p>
-                <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-                  {cert.skills.map(s => (
-                    <span key={s} style={{ fontSize: 12, color: C.dim, background: C.surface, border: `1px solid ${C.border}`, padding: "2px 9px", borderRadius: 5 }}>{s}</span>
-                  ))}
-                </div>
-              </div>
-            ))}
+        {/* EXPERIENCE */}
+        <section className="split" {...sec("Experience")}>
+          <SectionHead kicker="Experience" title="Where I've been" />
+          <div className="reveal">
+            <ol className="timeline">
+              {TIMELINE.map(t => (
+                <li key={t.what}>
+                  <span className="mono muted">{t.when}</span>
+                  <strong>{t.what}</strong>
+                  <span className="muted">{t.where}</span>
+                </li>
+              ))}
+            </ol>
+            <button className="btn btn-line" onClick={() => setShowResume(true)}>Full résumé →</button>
           </div>
+        </section>
+
+        {/* CREDENTIALS */}
+        <section {...sec("Credentials")}>
+          <SectionHead kicker="Programs & certifications" title="Where I keep learning" />
+          <ul className="cred-list">
+            {CERTIFICATIONS.map(c => (
+              <li key={c.title} className="reveal">
+                <button className="cred-row" onClick={() => openCert(c)} style={{ "--c": c.col }}>
+                  <span className="mono muted cred-date">{c.date}</span>
+                  <span className="cred-main">
+                    <span className="cred-title">{c.title}</span>
+                    <span className="muted">{c.issuer}</span>
+                  </span>
+                  <Tag label={c.tag} color={c.col} />
+                  <span className="arrow" aria-hidden="true">→</span>
+                </button>
+              </li>
+            ))}
+          </ul>
         </section>
 
         {/* SKILLS */}
-        <section {...sec("Skills")} style={{ paddingBottom: 64 }}>
-          <SectionTitle text="Skills" col={C.cyan} />
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(190px,1fr))", gap: 16 }}>
-            {SKILLS.map((s, i) => (
-              <div key={i} style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 14, padding: 20 }}>
-                <div style={{ height: 3, width: 32, borderRadius: 2, background: s.col, marginBottom: 14 }} />
-                <h4 style={{ fontSize: 11, fontWeight: 800, color: C.text, textTransform: "uppercase", letterSpacing: 1.2, marginBottom: 14 }}>{s.cat}</h4>
-                <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-                  {s.items.map(it => (
-                    <span key={it} style={{ fontSize: 12, color: C.muted, background: C.surface, border: `1px solid ${C.border}`, padding: "3px 9px", borderRadius: 6 }}>{it}</span>
-                  ))}
-                </div>
+        <section className="split">
+          <SectionHead kicker="Toolkit" title="What I work with" />
+          <dl className="skills reveal">
+            {SKILLS.map(s => (
+              <div key={s.cat} className="skill-row" style={{ "--c": s.col }}>
+                <dt>{s.cat}</dt>
+                <dd>{s.items.join(" / ")}</dd>
               </div>
             ))}
-          </div>
+          </dl>
         </section>
+      </main>
 
-        {/* RESUME */}
-        <section {...sec("Resume")} style={{ paddingBottom: 64 }}>
-          <SectionTitle text="Resume" col={C.pink} />
-          <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 14, padding: 32 }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: 16, marginBottom: 32 }}>
-              <div>
-                <h3 style={{ fontSize: 20, fontWeight: 800, marginBottom: 4 }}>Chilawo Nchimunya Munene</h3>
-                <p style={{ color: C.muted, fontSize: 14 }}>Computer Science · Grambling State University · GPA 3.9/4.0 · Dec 2027</p>
-              </div>
-              <button onClick={() => setShowResume(true)} style={{ background: `linear-gradient(135deg,${C.purpleD},${C.cyanD})`, color: "#fff", padding: "10px 22px", borderRadius: 9, fontSize: 14, fontWeight: 700, border: "none", cursor: "pointer" }}>
-                View Resume
-              </button>
-            </div>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(200px,1fr))", gap: 28 }}>
-              <div>
-                <p style={{ fontSize: 11, fontWeight: 800, textTransform: "uppercase", letterSpacing: 1.4, color: C.purple, marginBottom: 14 }}>Education</p>
-                <ResumeRow main="B.S. Computer Science · GPA 3.9/4.0" sub="Grambling State University · Jan 2024 – Dec 2027" col={C.purple} />
-              </div>
-              <div>
-                <p style={{ fontSize: 11, fontWeight: 800, textTransform: "uppercase", letterSpacing: 1.4, color: C.cyan, marginBottom: 14 }}>Experience</p>
-                <ResumeRow main="Data Analytics Intern" sub="ERIC · University of Memphis · Jun–Jul 2025" col={C.cyan} />
-                <ResumeRow main="Senior Resident Assistant" sub="Grambling State University · Aug 2024–Present" col={C.cyan} />
-              </div>
-              <div>
-                <p style={{ fontSize: 11, fontWeight: 800, textTransform: "uppercase", letterSpacing: 1.4, color: C.pink, marginBottom: 14 }}>Honors & Awards</p>
-                <ResumeRow main="EICOP 2026 Finalist" col={C.pink} />
-                <ResumeRow main="Earl Lester Cole Honors Student" col={C.pink} />
-                <ResumeRow main="President's List" col={C.pink} />
-                <ResumeRow main="TechWise Fellow" col={C.pink} />
-                <ResumeRow main="NASA L'SPACE Scholar" col={C.pink} />
-                <ResumeRow main="ColorStack Fellow" col={C.pink} />
-              </div>
-              <div>
-                <p style={{ fontSize: 11, fontWeight: 800, textTransform: "uppercase", letterSpacing: 1.4, color: C.purple, marginBottom: 14 }}>Focus Areas</p>
-                <ResumeRow main="AI for Health Equity" sub="ML in medical diagnostics" col={C.purple} />
-                <ResumeRow main="Social Impact Tech" sub="Technology access & equity" col={C.purple} />
-              </div>
-            </div>
+      {/* CONTACT */}
+      <section className="contact" {...sec("Contact")}>
+        <div className="wrap">
+          <p className="eyebrow">Contact</p>
+          <h2 className="reveal">Let's build something that <em>matters.</em></h2>
+          <p className="contact-lead">Open to research collaborations, internships, and conversations about AI, data, and social impact.</p>
+          <p className="contact-email mono">chilawomunene2023@gmail.com</p>
+          <div className="actions">
+            <a className="btn btn-light" href="mailto:chilawomunene2023@gmail.com">Email me</a>
+            <a className="btn btn-light-line" href="https://github.com/Munya574" target="_blank" rel="noreferrer">GitHub ↗</a>
+            <a className="btn btn-light-line" href="https://linkedin.com/in/chilawomunene" target="_blank" rel="noreferrer">LinkedIn ↗</a>
           </div>
-        </section>
-
-        {/* CONTACT */}
-        <section {...sec("Contact")} style={{ paddingBottom: 80 }}>
-          <SectionTitle text="Contact" col={C.purple} />
-          <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 14, padding: "48px 32px", textAlign: "center" }}>
-            <div style={{ width: 56, height: 56, borderRadius: "50%", background: `linear-gradient(135deg,${C.purpleD},${C.cyanD})`, margin: "0 auto 18px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 22 }}>✉</div>
-            <h3 style={{ fontSize: 22, fontWeight: 800, marginBottom: 10 }}>Let's connect</h3>
-            <p style={{ color: C.muted, maxWidth: 400, margin: "0 auto 28px", lineHeight: 1.7, fontSize: 15 }}>
-              Open to research collaborations, internships, and conversations about AI, data, and social impact.
-            </p>
-            <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
-              {[
-                { label: "Email", href: "mailto:chilawomunene2023@gmail.com", col: C.purple },
-                { label: "GitHub", href: "https://github.com/Munya574", col: C.cyan },
-                { label: "LinkedIn", href: "https://linkedin.com/in/chilawomunene", col: C.pink }
-              ].map(l => (
-                <a key={l.label} href={l.href}
-                  style={{ padding: "10px 24px", borderRadius: 9, border: `1px solid ${l.col}55`, color: l.col, textDecoration: "none", fontSize: 14, fontWeight: 700, background: l.col + "11" }}>
-                  {l.label}
-                </a>
-              ))}
-            </div>
-          </div>
-        </section>
-
-      </div>
-
-      <footer style={{ borderTop: `1px solid ${C.border}`, textAlign: "center", padding: 20, color: C.dim, fontSize: 13 }}>
-        Chilawo Munene · Built with React
-      </footer>
+        </div>
+        <footer className="wrap footer mono">
+          <span>© 2026 Chilawo Munene</span>
+          <span>Built with React</span>
+        </footer>
+      </section>
     </div>
   );
 }
